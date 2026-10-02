@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+dist/
+vector/*.svg
+preview/comparisons/
+preview/iterations/
+docs/build-statistics.json
+docs/geometry-landmarks.json
+docs/verification.json

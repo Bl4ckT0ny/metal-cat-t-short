@@ -1,0 +1,80 @@
+name: Build vector release
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag (for example vector-v1)
+        required: true
+        type: string
+      publish:
+        description: Publish a Release after successful build (otherwise save Actions artifacts)
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+concurrency:
+  group: vector-release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Validate release tag
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          python3 -c 'import os,re; assert re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,79}",os.environ["RELEASE_TAG"]), "Invalid release tag"'
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcairo2 python3-venv
+          python3 -m venv .venv
+          .venv/bin/pip install -r scripts/requirements.txt
+      - name: Build and verify
+        run: |
+          .venv/bin/python scripts/build_vector.py --epsilon .1
+          .venv/bin/python scripts/verify_vector.py
+      - name: Package release
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: .venv/bin/python scripts/package_release.py --tag "$RELEASE_TAG"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vector-release
+          path: dist/${{ inputs.tag }}/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+  release:
+    if: ${{ inputs.publish }}
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: vector-release
+          path: dist
+      - name: Verify assets and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ inputs.tag }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          cd dist
+          sha256sum -c SHA256SUMS
+          gh api "repos/$GH_REPO/git/matching-refs/tags/$RELEASE_TAG" > tag-refs.json
+          python3 -c 'import json,os; wanted="refs/tags/"+os.environ["RELEASE_TAG"]; assert not any(x["ref"]==wanted for x in json.load(open("tag-refs.json"))), "Tag already exists; choose a fresh tag"'
+          rm tag-refs.json
+          gh release create "$RELEASE_TAG" metal-cat-master.svg ./*.zip manifest.json SHA256SUMS \
+            --target "$SOURCE_SHA" --draft --title "Metal Cat — $RELEASE_TAG" \
+            --notes "Five-layer vector master, comparison previews and hard-check report. Halftone remains deferred. Source commit: $SOURCE_SHA."
+          gh release edit "$RELEASE_TAG" --draft=false
