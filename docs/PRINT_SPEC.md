@@ -1,5 +1,6 @@
 # Print specification
 
+English | [Русский](PRINT_SPEC.ru.md)
 
 ## Locked artwork
 

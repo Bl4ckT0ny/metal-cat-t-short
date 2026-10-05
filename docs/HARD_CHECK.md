@@ -1,5 +1,6 @@
 # Vector master verification
 
+English | [Русский](HARD_CHECK.ru.md)
 
 ## SVG
 
