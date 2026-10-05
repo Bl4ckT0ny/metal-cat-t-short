@@ -1,5 +1,6 @@
 # Print specification
 
+
 ## Locked artwork
 
 The approved cat/guitar composition is fixed. Do not alter:
@@ -13,9 +14,9 @@ The approved cat/guitar composition is fixed. Do not alter:
 ## Intended production method
 
 - Screen printing on black T-shirt
-- 5 spot colors
+- 5 spot-color inks
 - Black shirt fabric used as base / negative space where possible
-- Halftones allowed to preserve dimensionality in fur and shadows
+- Halftone screening is used to reproduce tonal detail in fur and shadows
 
 ## Spot-color palette
 
@@ -45,7 +46,7 @@ The master should preserve enough detail for the 44 × 55 cm version. Smaller pr
 - Do not upscale a reduced raster master to create larger print sizes.
 - Keep the editable master in vector form at the largest intended production size.
 - Fine details must still respect the printer's minimum printable line / gap / dot size.
-- Halftones should preferably be generated or validated for the **final physical output size** and the print shop's chosen mesh / LPI. Do not assume that an already-rasterized halftone can be scaled arbitrarily.
+- Halftones should preferably be generated or validated for the **final physical output size** and the print shop's chosen screen mesh and halftone ruling (LPI). Do not assume that an screened halftone pattern can be scaled arbitrarily.
 - If the printer's maximum area is smaller than 44 × 55 cm, reduce the vector artwork proportionally to fit.
 
 ## Deliverables
@@ -55,7 +56,7 @@ The master should preserve enough detail for the 44 × 55 cm version. Smaller pr
 - editable SVG vector master
 - print-ready PDF
 - shirt preview
-- registration / trapping adjustments as required by printer
+- color registration and trapping adjustments as required by the print shop
 
 ## Production principle
 
