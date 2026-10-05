@@ -7,7 +7,7 @@ ROOT=Path(__file__).resolve().parents[1]
 def package(tag):
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}',tag):
         raise ValueError('Tag must contain only letters, digits, dot, underscore or hyphen')
-    files=[ROOT/'vector/metal-cat-master.svg',ROOT/'preview/iterations/metal-cat-master.png',ROOT/'docs/HARD_CHECK.md',ROOT/'docs/verification.json',ROOT/'docs/build-statistics.json',ROOT/'docs/geometry-landmarks.json']
+    files=[ROOT/'vector/metal-cat-master.svg',ROOT/'preview/iterations/metal-cat-master.png',ROOT/'docs/HARD_CHECK.md',ROOT/'docs/HARD_CHECK.ru.md',ROOT/'docs/verification.json',ROOT/'docs/build-statistics.json',ROOT/'docs/geometry-landmarks.json']
     for size in [1254,627,314]:
         files.append(ROOT/f'preview/comparisons/comparison-{size}.png')
     for name in ['hard-check-strings','hard-check-headstock','hard-check-paws','face-reference-vector']:

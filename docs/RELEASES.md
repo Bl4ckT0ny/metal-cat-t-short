@@ -1,5 +1,6 @@
 # Release workflow
 
+English | [Русский](RELEASES.ru.md)
 
 ## Run on GitHub
 
